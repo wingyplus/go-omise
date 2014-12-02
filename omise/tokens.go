@@ -19,9 +19,18 @@ type CardInfo struct {
 	SecurityCode    int
 }
 
+type Card struct {
+	ID       string `json:"id"`
+	LiveMode bool   `json:"livemode"`
+	Country  string `json:"country"`
+}
+
 type Token struct {
 	ID       string `json:"id"`
 	LiveMode bool   `json:"livemode"`
+	Used     bool   `json:"used"`
+	Location string `json:"location"`
+	Card     *Card  `json:"card"`
 }
 
 type TokensService struct {

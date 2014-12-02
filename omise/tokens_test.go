@@ -59,10 +59,52 @@ func TestCreateToken(t *testing.T) {
 	if err != nil {
 		t.Error("expect error should be nil")
 	}
+	testToken(t, token)
+}
+
+func testToken(t *testing.T, token *Token) {
 	if token.ID != "tokn_test_4y96o5lnx6m7fw8wpg9" {
 		t.Errorf("expect tokn_test_4y96o5lnx6m7fw8wpg9 but got %s", token.ID)
 	}
 	if token.LiveMode != false {
 		t.Error("expect live mode to be false")
+	}
+	if token.Used != false {
+		t.Error("expect used to be false")
+	}
+	if token.Location != "/tokens/tokn_test_4y96o5lnx6m7fw8wpg9" {
+		t.Errorf("expect location %s but got %s", "/tokens/tokn_test_4y96o5lnx6m7fw8wpg9", token.Location)
+	}
+
+	testCard(t, token.Card)
+}
+
+func testCard(t *testing.T, c *Card) {
+	if c == nil {
+		t.Error("expect card not to be nil")
+	}
+	/*
+		"id": "card_test_4y96o5lmaos8ulnea6y",
+		"livemode": false,
+		"country": "us",
+		"city": "Bangkok",
+		"postal_code": "10320",
+		"financing": "",
+		"last_digits": "4242",
+		"brand": "Visa",
+		"expiration_month": 10,
+		"expiration_year": 2018,
+		"fingerprint": "dmCDUHPNUyfWPtkas7mm/IMBA7oYMEJ3B9SK3kMDzQQ=",
+		"name": "Somchai Prasert",
+		"security_code_check": true,
+	*/
+	if c.ID != "card_test_4y96o5lmaos8ulnea6y" {
+		t.Errorf("expect %s but got %s", "card_test_4y96o5lmaos8ulnea6y", c.ID)
+	}
+	if c.LiveMode != false {
+		t.Error("expect livemode to be false")
+	}
+	if c.Country != "us" {
+		t.Errorf("expect country is us but got %s", c.Country)
 	}
 }
