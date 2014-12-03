@@ -173,3 +173,50 @@ func TestGetToken(t *testing.T) {
 
 	testToken(t, token)
 }
+
+func TestGetTokenNotFound(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.Write([]byte(`{
+			"object": "error",
+			"location": "https://docs.omise.co/api/errors#not-found",
+			"code": "not_found",
+			"message": "token tokn_test_4y9ki6uod9yna26dnlf was not found"
+		}`))
+	}))
+	defer ts.Close()
+
+	var tks = TokensService{
+		Key: "pkey_test_4xhd177bnqcnz8lqp7c",
+		URL: ts.URL,
+	}
+
+	var (
+		token *Token
+		err   error
+	)
+	token, err = tks.Get("tokn_test_4y96o5lnx6m7fw8wpg9")
+
+	if token != nil {
+		t.Error("expect token to be nil")
+	}
+
+	if nfe, ok := err.(*NotFoundError); ok {
+		testNotFoundError(t, nfe)
+	} else {
+		t.Errorf("expect err not to be nil")
+	}
+}
+
+func testNotFoundError(t *testing.T, err *NotFoundError) {
+	if err.Location != "https://docs.omise.co/api/errors#not-found" {
+		t.Errorf("expect location is https://docs.omise.co/api/errors#not-found but got %s", err.Location)
+	}
+	if err.Code != "not_found" {
+		t.Errorf("expect code is not_found but got %s", err.Code)
+	}
+	if err.Message != "token tokn_test_4y9ki6uod9yna26dnlf was not found" {
+		t.Errorf("expect message is `token tokn_test_4y9ki6uod9yna26dnlf was not found` but got %s", err.Message)
+	}
+}

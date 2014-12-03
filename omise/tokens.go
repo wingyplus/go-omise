@@ -43,6 +43,16 @@ type Token struct {
 	Card     *Card  `json:"card"`
 }
 
+type NotFoundError struct {
+	Location string `json:"location"`
+	Code string `json:"code"`
+	Message string `json:"message"`
+}
+
+func (err *NotFoundError) Error() string {
+	return ""
+}
+
 type TokensService struct {
 	Key string
 	URL string
@@ -65,6 +75,7 @@ func (ts *TokensService) Create(ci *CardInfo) (*Token, error) {
 
 	resp, _ := c.Do(req)
 
+
 	b, _ := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 
@@ -82,7 +93,15 @@ func (ts *TokensService) Get(key string) (*Token, error) {
 	b, _ := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
 
-	var t Token
+	var (
+		t Token
+		e NotFoundError
+	)
+
+	if resp.StatusCode == http.StatusNotFound {
+		json.Unmarshal(b, &e)
+		return nil, &e
+	}
 	err := json.Unmarshal(b, &t)
 	return &t, err
 }
