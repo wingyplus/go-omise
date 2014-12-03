@@ -84,5 +84,5 @@ func (ts *TokensService) Get(key string) (*Token, error) {
 
 	var t Token
 	err := json.Unmarshal(b, &t)
-	return &t, nil
+	return &t, err
 }
