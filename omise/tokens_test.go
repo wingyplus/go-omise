@@ -6,35 +6,37 @@ import (
 	"testing"
 )
 
-func TestCreateToken(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.Write([]byte(`{
-			"object": "token",
-			"id": "tokn_test_4y96o5lnx6m7fw8wpg9",
+var tokenSuccessHandler http.Handler = http.HandlerFunc(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write([]byte(`{
+		"object": "token",
+		"id": "tokn_test_4y96o5lnx6m7fw8wpg9",
+		"livemode": false,
+		"location": "/tokens/tokn_test_4y96o5lnx6m7fw8wpg9",
+		"used": false,
+		"card": {
+			"object": "card",
+			"id": "card_test_4y96o5lmaos8ulnea6y",
 			"livemode": false,
-			"location": "/tokens/tokn_test_4y96o5lnx6m7fw8wpg9",
-			"used": false,
-			"card": {
-				"object": "card",
-				"id": "card_test_4y96o5lmaos8ulnea6y",
-				"livemode": false,
-				"country": "us",
-				"city": "Bangkok",
-				"postal_code": "10320",
-				"financing": "",
-				"last_digits": "4242",
-				"brand": "Visa",
-				"expiration_month": 10,
-				"expiration_year": 2018,
-				"fingerprint": "dmCDUHPNUyfWPtkas7mm/IMBA7oYMEJ3B9SK3kMDzQQ=",
-				"name": "Somchai Prasert",
-				"security_code_check": true,
-				"created": "2014-12-02T16:39:55Z"
-			},
+			"country": "us",
+			"city": "Bangkok",
+			"postal_code": "10320",
+			"financing": "",
+			"last_digits": "4242",
+			"brand": "Visa",
+			"expiration_month": 10,
+			"expiration_year": 2018,
+			"fingerprint": "dmCDUHPNUyfWPtkas7mm/IMBA7oYMEJ3B9SK3kMDzQQ=",
+			"name": "Somchai Prasert",
+			"security_code_check": true,
 			"created": "2014-12-02T16:39:55Z"
-		}`))
-	}))
+		},
+		"created": "2014-12-02T16:39:55Z"
+	}`))
+}))
+
+func TestCreateToken(t *testing.T) {
+	ts := httptest.NewServer(tokenSuccessHandler)
 	defer ts.Close()
 
 	var tks = TokensService{
@@ -126,34 +128,7 @@ func testCard(t *testing.T, c *Card) {
 }
 
 func TestGetToken(t *testing.T) {
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		w.Write([]byte(`{
-			"object": "token",
-			"id": "tokn_test_4y96o5lnx6m7fw8wpg9",
-			"livemode": false,
-			"location": "/tokens/tokn_test_4y96o5lnx6m7fw8wpg9",
-			"used": false,
-			"card": {
-				"object": "card",
-				"id": "card_test_4y96o5lmaos8ulnea6y",
-				"livemode": false,
-				"country": "us",
-				"city": "Bangkok",
-				"postal_code": "10320",
-				"financing": "",
-				"last_digits": "4242",
-				"brand": "Visa",
-				"expiration_month": 10,
-				"expiration_year": 2018,
-				"fingerprint": "dmCDUHPNUyfWPtkas7mm/IMBA7oYMEJ3B9SK3kMDzQQ=",
-				"name": "Somchai Prasert",
-				"security_code_check": true,
-				"created": "2014-12-02T16:39:55Z"
-			},
-			"created": "2014-12-02T16:39:55Z"
-		}`))
-	}))
+	ts := httptest.NewServer(tokenSuccessHandler)
 	defer ts.Close()
 
 	var tks = TokensService{
