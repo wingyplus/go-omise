@@ -35,6 +35,7 @@ func TestCreateToken(t *testing.T) {
 			"created": "2014-12-02T16:39:55Z"
 		}`))
 	}))
+	defer ts.Close()
 
 	var tks = TokensService{
 		Key: "pkey_test_4xhd177bnqcnz8lqp7c",
