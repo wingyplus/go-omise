@@ -83,21 +83,6 @@ func testCard(t *testing.T, c *Card) {
 	if c == nil {
 		t.Error("expect card not to be nil")
 	}
-	/*
-		"id": "card_test_4y96o5lmaos8ulnea6y",
-		"livemode": false,
-		"country": "us",
-		"city": "Bangkok",
-		"postal_code": "10320",
-		"financing": "",
-		"last_digits": "4242",
-		"brand": "Visa",
-		"expiration_month": 10,
-		"expiration_year": 2018,
-		"fingerprint": "dmCDUHPNUyfWPtkas7mm/IMBA7oYMEJ3B9SK3kMDzQQ=",
-		"name": "Somchai Prasert",
-		"security_code_check": true,
-	*/
 	if c.ID != "card_test_4y96o5lmaos8ulnea6y" {
 		t.Errorf("expect %s but got %s", "card_test_4y96o5lmaos8ulnea6y", c.ID)
 	}
@@ -106,5 +91,35 @@ func testCard(t *testing.T, c *Card) {
 	}
 	if c.Country != "us" {
 		t.Errorf("expect country is us but got %s", c.Country)
+	}
+	if c.City != "Bangkok" {
+		t.Errorf("expect city is Bangkok but got %s", c.City)
+	}
+	if c.PostalCode != "10320" {
+		t.Errorf("expect postal code is 10320 but got %s", c.PostalCode)
+	}
+	if c.Financing != "" {
+		t.Errorf("expect financing is empty")
+	}
+	if c.LastDigits != "4242" {
+		t.Errorf("expect last digits is 4242 but got %s", c.LastDigits)
+	}
+	if c.Brand != "Visa" {
+		t.Errorf("expect brand is visa but got %s", c.Brand)
+	}
+	if c.ExpirationMonth != 10 {
+		t.Errorf("expect expiration month but got %d", c.ExpirationMonth)
+	}
+	if c.ExpirationYear != 2018 {
+		t.Errorf("expect expiration year but got %d", c.ExpirationYear)
+	}
+	if c.Fingerprint != "dmCDUHPNUyfWPtkas7mm/IMBA7oYMEJ3B9SK3kMDzQQ=" {
+		t.Errorf("expect fingerprint is dmCDUHPNUyfWPtkas7mm/IMBA7oYMEJ3B9SK3kMDzQQ= but got %s", c.Fingerprint)
+	}
+	if c.Name != "Somchai Prasert" {
+		t.Errorf("expect name is Somchai Prasert but got %s", c.Name)
+	}
+	if c.SecurityCodeCheck != true {
+		t.Errorf("expect security code check is true but got %t", c.SecurityCodeCheck)
 	}
 }
