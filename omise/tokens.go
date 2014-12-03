@@ -73,3 +73,16 @@ func (ts *TokensService) Create(ci *CardInfo) (*Token, error) {
 
 	return &t, err
 }
+
+func (ts *TokensService) Get(key string) (*Token, error) {
+	req, _ := http.NewRequest("GET", ts.URL+"/tokens/"+key, nil)
+	req.SetBasicAuth(ts.Key, "")
+	c := &http.Client{}
+	resp, _ := c.Do(req)
+	b, _ := ioutil.ReadAll(resp.Body)
+	defer resp.Body.Close()
+
+	var t Token
+	err := json.Unmarshal(b, &t)
+	return &t, nil
+}
