@@ -40,8 +40,8 @@ func TestCreateToken(t *testing.T) {
 	defer ts.Close()
 
 	var tks = TokensService{
-		Key: "pkey_test_4xhd177bnqcnz8lqp7c",
-		URL: ts.URL,
+		Key:    "pkey_test_4xhd177bnqcnz8lqp7c",
+		client: newClient(ts.URL),
 	}
 
 	var (
@@ -141,8 +141,8 @@ func TestCreateTokenInvalidCard(t *testing.T) {
 	defer ts.Close()
 
 	var tks = TokensService{
-		Key: "pkey_test_4xhd177bnqcnz8lqp7c",
-		URL: ts.URL,
+		Key:    "pkey_test_4xhd177bnqcnz8lqp7c",
+		client: newClient(ts.URL),
 	}
 
 	_, err := tks.Create(&CardInfo{
@@ -165,8 +165,8 @@ func TestGetToken(t *testing.T) {
 	defer ts.Close()
 
 	var tks = TokensService{
-		Key: "pkey_test_4xhd177bnqcnz8lqp7c",
-		URL: ts.URL,
+		Key:    "pkey_test_4xhd177bnqcnz8lqp7c",
+		client: newClient(ts.URL),
 	}
 
 	var (
@@ -196,8 +196,8 @@ func TestGetTokenNotFound(t *testing.T) {
 	defer ts.Close()
 
 	var tks = TokensService{
-		Key: "pkey_test_4xhd177bnqcnz8lqp7c",
-		URL: ts.URL,
+		Key:    "pkey_test_4xhd177bnqcnz8lqp7c",
+		client: newClient(ts.URL),
 	}
 
 	var (
@@ -210,14 +210,14 @@ func TestGetTokenNotFound(t *testing.T) {
 		t.Error("expect token to be nil")
 	}
 
-	if nfe, ok := err.(*NotFoundError); ok {
+	if nfe, ok := err.(*OmiseError); ok {
 		testNotFoundError(t, nfe)
 	} else {
 		t.Errorf("expect err not to be nil")
 	}
 }
 
-func testNotFoundError(t *testing.T, err *NotFoundError) {
+func testNotFoundError(t *testing.T, err *OmiseError) {
 	if err.Location != "https://docs.omise.co/api/errors#not-found" {
 		t.Errorf("expect location is https://docs.omise.co/api/errors#not-found but got %s", err.Location)
 	}

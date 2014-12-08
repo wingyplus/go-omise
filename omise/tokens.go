@@ -1,9 +1,6 @@
 package omise
 
 import (
-	"encoding/json"
-	"io/ioutil"
-	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -43,29 +40,9 @@ type Token struct {
 	Card     *Card  `json:"card"`
 }
 
-type NotFoundError struct {
-	Location string `json:"location"`
-	Code     string `json:"code"`
-	Message  string `json:"message"`
-}
-
-func (err *NotFoundError) Error() string {
-	return ""
-}
-
-type BadRequestError struct {
-	Location string `json:"location"`
-	Code     string `json:"code"`
-	Message  string `json:"message"`
-}
-
-func (err *BadRequestError) Error() string {
-	return ""
-}
-
 type TokensService struct {
-	Key string
-	URL string
+	Key    string
+	client *client
 }
 
 func (ts *TokensService) Create(ci *CardInfo) (*Token, error) {
@@ -78,44 +55,23 @@ func (ts *TokensService) Create(ci *CardInfo) (*Token, error) {
 	data.Set("card[postal_code]", ci.PostalCode)
 	data.Set("card[security_code]", strconv.Itoa(ci.SecurityCode))
 
-	req, _ := http.NewRequest("POST", ts.URL+"/tokens", strings.NewReader(data.Encode()))
-	req.SetBasicAuth(ts.Key, "")
-
-	c := &http.Client{}
-
-	resp, _ := c.Do(req)
-
-	b, _ := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
-	var e BadRequestError
-	if resp.StatusCode == http.StatusBadRequest {
-		json.Unmarshal(b, &e)
-		return nil, &e
+	resp, err := ts.client.doPost(ts.Key, "/tokens", strings.NewReader(data.Encode()))
+	if err != nil {
+		return nil, err
 	}
 
 	var t Token
-	err := json.Unmarshal(b, &t)
+	err = resp.decode(&t)
 
 	return &t, err
 }
 
 func (ts *TokensService) Get(key string) (*Token, error) {
-	req, _ := http.NewRequest("GET", ts.URL+"/tokens/"+key, nil)
-	req.SetBasicAuth(ts.Key, "")
-	c := &http.Client{}
-	resp, _ := c.Do(req)
-	b, _ := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
-
-	var (
-		t Token
-		e NotFoundError
-	)
-
-	if resp.StatusCode == http.StatusNotFound {
-		json.Unmarshal(b, &e)
-		return nil, &e
+	resp, err := ts.client.doGet(ts.Key, "/tokens/"+key)
+	if err != nil {
+		return nil, err
 	}
-	err := json.Unmarshal(b, &t)
+	var t Token
+	err = resp.decode(&t)
 	return &t, err
 }

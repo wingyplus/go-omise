@@ -7,6 +7,14 @@ import (
 	"net/http"
 )
 
+type OmiseError struct {
+	Location string
+	Code     string
+	Message  string
+}
+
+func (e *OmiseError) Error() string { return "" }
+
 type client struct {
 	*http.Client
 	url string
@@ -42,7 +50,16 @@ func (c *client) do(method, key, uri string, body io.Reader) (*response, error) 
 	if err != nil {
 		return nil, err
 	}
-	return &response{resp}, nil
+
+	var response = &response{resp}
+
+	if resp.StatusCode != http.StatusOK {
+		var omiseError OmiseError
+
+		response.decode(&omiseError)
+		return nil, &omiseError
+	}
+	return response, nil
 }
 
 func (c *client) doGet(key, uri string) (*response, error) {
