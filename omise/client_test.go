@@ -75,29 +75,33 @@ func TestErrorClient(t *testing.T) {
 	}
 
 	if e, ok := err.(*OmiseError); ok {
-		if e.Location != "https://docs.omise.co/api/errors#not-found" {
-			t.Errorf(
-				"expect location https://docs.omise.co/api/errors#not-found but got %s",
-				e.Location,
-			)
-		}
-		if e.Code != "not_found" {
-			t.Errorf(
-				"expect code is not_found but got %s",
-				e.Code,
-			)
-		}
-		if e.Message != "token tokn_test_4y9ki6uod9yna26dnlf was not found" {
-			t.Errorf(
-				"unexpect token is %s",
-				e.Message,
-			)
-		}
+		testOmiseError(t, e)
 	} else {
 		t.Error("expect err must be cast to OmiseError", err)
 	}
 
 	if err.Error() != "[not_found] token tokn_test_4y9ki6uod9yna26dnlf was not found" {
 		t.Error("unexpect message", err.Error())
+	}
+}
+
+func testOmiseError(t *testing.T, e *OmiseError) {
+	if e.Location != "https://docs.omise.co/api/errors#not-found" {
+		t.Errorf(
+			"expect location https://docs.omise.co/api/errors#not-found but got %s",
+			e.Location,
+		)
+	}
+	if e.Code != "not_found" {
+		t.Errorf(
+			"expect code is not_found but got %s",
+			e.Code,
+		)
+	}
+	if e.Message != "token tokn_test_4y9ki6uod9yna26dnlf was not found" {
+		t.Errorf(
+			"unexpect token is %s",
+			e.Message,
+		)
 	}
 }
