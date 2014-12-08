@@ -2,6 +2,7 @@ package omise
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -13,7 +14,9 @@ type OmiseError struct {
 	Message  string
 }
 
-func (e *OmiseError) Error() string { return "" }
+func (e *OmiseError) Error() string {
+	return fmt.Sprintf("[%s] %s", e.Code, e.Message)
+}
 
 type client struct {
 	*http.Client

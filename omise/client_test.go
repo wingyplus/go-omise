@@ -96,4 +96,8 @@ func TestErrorClient(t *testing.T) {
 	} else {
 		t.Error("expect err must be cast to OmiseError", err)
 	}
+
+	if err.Error() != "[not_found] token tokn_test_4y9ki6uod9yna26dnlf was not found" {
+		t.Error("unexpect message", err.Error())
+	}
 }
