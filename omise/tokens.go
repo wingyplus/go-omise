@@ -53,6 +53,16 @@ func (err *NotFoundError) Error() string {
 	return ""
 }
 
+type BadRequestError struct {
+	Location string `json:"location"`
+	Code string `json:"code"`
+	Message string `json:"message"`
+}
+
+func (err *BadRequestError) Error() string {
+	return ""
+}
+
 type TokensService struct {
 	Key string
 	URL string
@@ -75,9 +85,13 @@ func (ts *TokensService) Create(ci *CardInfo) (*Token, error) {
 
 	resp, _ := c.Do(req)
 
-
 	b, _ := ioutil.ReadAll(resp.Body)
 	defer resp.Body.Close()
+	var e BadRequestError
+	if resp.StatusCode == http.StatusBadRequest {
+		json.Unmarshal(b, &e)
+		return nil, &e
+	}
 
 	var t Token
 	err := json.Unmarshal(b, &t)

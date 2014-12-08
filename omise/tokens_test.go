@@ -127,6 +127,39 @@ func testCard(t *testing.T, c *Card) {
 	}
 }
 
+func TestCreateTokenInvalidCard(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.Write([]byte(`{
+			"object": "error",
+			"location": "https://docs.omise.co/api/errors#invalid-card",
+			"code": "invalid_card",
+			"message": "number is invalid"
+		}`))
+	}))
+	defer ts.Close()
+
+	var tks = TokensService{
+		Key: "pkey_test_4xhd177bnqcnz8lqp7c",
+		URL: ts.URL,
+	}
+
+	_, err := tks.Create(&CardInfo{
+		Name:            "Somchai Prasert",
+		Number:          "4242424242424243",
+		ExpirationMonth: 10,
+		ExpirationYear:  2018,
+		City:            "Bangkok",
+		PostalCode:      "10320",
+		SecurityCode:    123,
+	})
+
+	if err == nil {
+		t.Error("expect error not to be nil")
+	}
+}
+
 func TestGetToken(t *testing.T) {
 	ts := httptest.NewServer(tokenSuccessHandler)
 	defer ts.Close()
