@@ -45,8 +45,8 @@ type Token struct {
 
 type NotFoundError struct {
 	Location string `json:"location"`
-	Code string `json:"code"`
-	Message string `json:"message"`
+	Code     string `json:"code"`
+	Message  string `json:"message"`
 }
 
 func (err *NotFoundError) Error() string {
@@ -55,8 +55,8 @@ func (err *NotFoundError) Error() string {
 
 type BadRequestError struct {
 	Location string `json:"location"`
-	Code string `json:"code"`
-	Message string `json:"message"`
+	Code     string `json:"code"`
+	Message  string `json:"message"`
 }
 
 func (err *BadRequestError) Error() string {
