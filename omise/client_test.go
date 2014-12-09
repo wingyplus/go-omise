@@ -22,10 +22,10 @@ func TestClient(t *testing.T) {
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.Write([]byte(`{
-            "object": "account",
-            "id": "acct_4xhe277ad8n8zc8t9q9",
-            "email": "abc@mail.com"
-        }`))
+			"object": "account",
+			"id": "acct_4xhe277ad8n8zc8t9q9",
+			"email": "abc@mail.com"
+		}`))
 	}))
 	defer ts.Close()
 
@@ -55,11 +55,11 @@ func TestErrorClient(t *testing.T) {
 		w.WriteHeader(http.StatusNotFound)
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.Write([]byte(`{
-            "object": "error",
-            "location": "https://docs.omise.co/api/errors#not-found",
-            "code": "not_found",
-            "message": "token tokn_test_4y9ki6uod9yna26dnlf was not found"
-        }`))
+			"object": "error",
+			"location": "https://docs.omise.co/api/errors#not-found",
+			"code": "not_found",
+			"message": "token tokn_test_4y9ki6uod9yna26dnlf was not found"
+		}`))
 	}))
 	defer ts.Close()
 
