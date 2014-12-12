@@ -16,8 +16,8 @@ func TestClient(t *testing.T) {
 		if r.URL.Path != "/account" {
 			t.Error("expect path is /account")
 		}
-		if r.Header.Get("Authorization") != "Basic dG9rbl90ZXN0XzR5OTZvNWxueDZtN2Z3OHdwZzk6" {
-			t.Error("expect basic is set", "tokn_test_4y96o5lnx6m7fw8wpg9:")
+		if r.Header.Get("Authorization") != "Basic dG9rbl90ZXN0XzEyMzQ1Njc6" {
+			t.Error("expect basic is set", "tokn_test_1234567:")
 		}
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
@@ -33,7 +33,7 @@ func TestClient(t *testing.T) {
 		Client: &http.Client{},
 		url:    ts.URL,
 	}
-	resp, err := c.do("GET", "tokn_test_4y96o5lnx6m7fw8wpg9", "/account", nil)
+	resp, err := c.do("GET", "tokn_test_1234567", "/account", nil)
 
 	if err != nil {
 		t.Error(err)
@@ -58,7 +58,7 @@ func TestErrorClient(t *testing.T) {
 			"object": "error",
 			"location": "https://docs.omise.co/api/errors#not-found",
 			"code": "not_found",
-			"message": "token tokn_test_4y9ki6uod9yna26dnlf was not found"
+			"message": "token tokn_test_1234567 was not found"
 		}`))
 	}))
 	defer ts.Close()
@@ -68,7 +68,7 @@ func TestErrorClient(t *testing.T) {
 		url:    ts.URL,
 	}
 
-	_, err := c.do("GET", "tokn_test_4y96o5lnx6m7fw8wpg9", "/account", nil)
+	_, err := c.do("GET", "tokn_test_1234567", "/account", nil)
 
 	if err == nil {
 		t.Error("expect error not to be nil")
@@ -80,7 +80,7 @@ func TestErrorClient(t *testing.T) {
 		t.Error("expect err must be cast to OmiseError", err)
 	}
 
-	if err.Error() != "[not_found] token tokn_test_4y9ki6uod9yna26dnlf was not found" {
+	if err.Error() != "[not_found] token tokn_test_1234567 was not found" {
 		t.Error("unexpect message", err.Error())
 	}
 }
@@ -98,7 +98,7 @@ func testOmiseError(t *testing.T, e *OmiseError) {
 			e.Code,
 		)
 	}
-	if e.Message != "token tokn_test_4y9ki6uod9yna26dnlf was not found" {
+	if e.Message != "token tokn_test_1234567 was not found" {
 		t.Errorf(
 			"unexpect token is %s",
 			e.Message,

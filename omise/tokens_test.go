@@ -40,7 +40,7 @@ func TestCreateToken(t *testing.T) {
 	defer ts.Close()
 
 	var tks = TokensService{
-		Key:    "pkey_test_4xhd177bnqcnz8lqp7c",
+		Key:    "pkey_test_1234567",
 		client: newClient(ts.URL),
 	}
 
@@ -141,7 +141,7 @@ func TestCreateTokenInvalidCard(t *testing.T) {
 	defer ts.Close()
 
 	var tks = TokensService{
-		Key:    "pkey_test_4xhd177bnqcnz8lqp7c",
+		Key:    "pkey_test_1234567",
 		client: newClient(ts.URL),
 	}
 
@@ -165,7 +165,7 @@ func TestGetToken(t *testing.T) {
 	defer ts.Close()
 
 	var tks = TokensService{
-		Key:    "pkey_test_4xhd177bnqcnz8lqp7c",
+		Key:    "pkey_test_1234567",
 		client: newClient(ts.URL),
 	}
 
@@ -196,7 +196,7 @@ func TestGetTokenNotFound(t *testing.T) {
 	defer ts.Close()
 
 	var tks = TokensService{
-		Key:    "pkey_test_4xhd177bnqcnz8lqp7c",
+		Key:    "pkey_test_1234567",
 		client: newClient(ts.URL),
 	}
 

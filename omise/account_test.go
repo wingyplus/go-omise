@@ -19,7 +19,7 @@ func TestAccount(t *testing.T) {
 	defer ts.Close()
 
 	var as = &AccountService{
-		Key:    "skey_test_4xhd177bpqytcpk1w2a",
+		Key:    "skey_test_1234567",
 		client: newClient(ts.URL),
 	}
 
